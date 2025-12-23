@@ -31,7 +31,7 @@ func main() {
 		log.Fatalf("Wrong API key: %s", err)
 	}
 
-	internal.InitDiscordBot(dg)
+	internal.HandleBot(dg, db)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)

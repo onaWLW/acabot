@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"gorm.io/gorm"
 )
 
-func InitDiscordBot(dg *discordgo.Session) {
+func HandleBot(dg *discordgo.Session, db *gorm.DB) {
 	dg.AddHandler(AcabSent)
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
