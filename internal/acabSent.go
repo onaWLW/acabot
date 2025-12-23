@@ -31,6 +31,5 @@ func isAcab(message string) bool {
 
 func is13h12(mId string) bool {
 	date := getMessageTime(mId)
-
 	return date.Hour() == 13 && date.Minute() == 12
 }
