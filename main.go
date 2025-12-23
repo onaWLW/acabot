@@ -2,7 +2,6 @@ package main
 
 import (
 	"acabot/internal"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -10,6 +9,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -18,22 +19,20 @@ func main() {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
+	db, err := gorm.Open(sqlite.Open(os.Getenv("SQLITE_DATABASE_PATH")), &gorm.Config{})
+	if err != nil {
+		log.Fatal("failed to connect database")
+	}
+
+	internal.InitDatabase(db)
+
 	dg, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
 		log.Fatalf("Wrong API key: %s", err)
 	}
 
-	dg.AddHandler(internal.AcabSent)
+	internal.InitDiscordBot(dg)
 
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
-
-	err = dg.Open()
-	if err != nil {
-		fmt.Println("error opening connection,", err)
-		return
-	}
-
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
