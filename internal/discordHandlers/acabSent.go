@@ -5,6 +5,7 @@ import (
 	"log"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"gorm.io/gorm"
@@ -16,13 +17,15 @@ func AcabSent(db *gorm.DB) func(*discordgo.Session, *discordgo.MessageCreate) {
 			return
 		}
 
-		if isAcab(m.Content) && is13h12(m) && !databaseActions.AlreadySent(db, m.Author.ID, m.GuildID, 13, 12) {
+		messageTime := getMessageTime(m)
+
+		if isAcab(m.Content) && is13h12(messageTime) && !databaseActions.AlreadySent(db, m.Author.ID, m.GuildID, messageTime) {
 			err := s.MessageReactionAdd(m.ChannelID, m.ID, "🔥")
 			if err != nil {
 				log.Fatal("Unable to add a reaction to the 'acab' message")
 			}
 
-			databaseActions.AddAcab(db, m.Author.ID, m.GuildID)
+			databaseActions.AddAcab(db, m.Author.ID, m.GuildID, messageTime)
 		}
 	}
 }
@@ -35,7 +38,6 @@ func isAcab(message string) bool {
 	return strings.Contains(message, "acab") || strings.Contains(message, "1312")
 }
 
-func is13h12(m *discordgo.MessageCreate) bool {
-	date := getMessageTime(m)
-	return date.Hour() == 13 && date.Minute() == 12
+func is13h12(messageTime time.Time) bool {
+	return messageTime.Hour() == 13 && messageTime.Minute() == 12
 }

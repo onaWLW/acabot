@@ -8,17 +8,11 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 )
 
 func getMessageTime(m *discordgo.MessageCreate) time.Time {
 	// Debug mode
 	if len(m.Content) > 0 && m.Content[0] == '!' {
-		err := godotenv.Load(".env")
-		if err != nil {
-			log.Fatalf("Error loading .env file: %s", err)
-		}
-
 		if os.Getenv("DEBUG") == "enabled" {
 			dateStr := m.Content[1:20]
 			t, err := time.Parse("2006-01-02 15:04:05", dateStr)

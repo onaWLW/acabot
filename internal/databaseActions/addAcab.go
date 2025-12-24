@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AddAcab(db *gorm.DB, uId string, sId string) {
+func AddAcab(db *gorm.DB, uId string, sId string, messageTime time.Time) {
 	var score model.Score
 	db.
 		Where(&model.Score{
@@ -18,7 +18,7 @@ func AddAcab(db *gorm.DB, uId string, sId string) {
 			Streak:      0,
 			AcabCount:   0,
 			AcacCount:   0,
-			LastUpdated: time.Now(),
+			LastUpdated: messageTime,
 		}).
 		FirstOrCreate(&score)
 
@@ -28,7 +28,7 @@ func AddAcab(db *gorm.DB, uId string, sId string) {
 	} else {
 		score.Streak = 1
 	}
-	score.LastUpdated = time.Now()
+	score.LastUpdated = messageTime
 
 	db.Save(&score)
 }

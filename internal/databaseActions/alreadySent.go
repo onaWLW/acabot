@@ -2,11 +2,12 @@ package databaseActions
 
 import (
 	"acabot/internal/model"
+	"time"
 
 	"gorm.io/gorm"
 )
 
-func AlreadySent(db *gorm.DB, uId string, sId string, hour int, minute int) bool {
+func AlreadySent(db *gorm.DB, uId string, sId string, messageTime time.Time) bool {
 	var score model.Score
 	db.
 		Where(&model.Score{
@@ -14,5 +15,16 @@ func AlreadySent(db *gorm.DB, uId string, sId string, hour int, minute int) bool
 			ServerId: sId,
 		}).First(&score)
 
-	return score.LastUpdated.Hour() == hour && score.LastUpdated.Minute() == minute && score.Streak != 0
+	if score.UserId == "" {
+		return false
+	}
+
+	last := score.LastUpdated
+
+	return last.Year() == messageTime.Year() &&
+		last.Month() == messageTime.Month() &&
+		last.Day() == messageTime.Day() &&
+		last.Hour() == 13 &&
+		last.Minute() == 12 &&
+		score.Streak != 0
 }
