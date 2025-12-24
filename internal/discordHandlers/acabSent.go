@@ -16,7 +16,7 @@ func AcabSent(db *gorm.DB) func(*discordgo.Session, *discordgo.MessageCreate) {
 			return
 		}
 
-		if isAcab(m.Content) && is13h12(m.ID) && !databaseActions.AlreadySent(db, m.Author.ID, m.GuildID, 13, 12) {
+		if isAcab(m.Content) && is13h12(m) && !databaseActions.AlreadySent(db, m.Author.ID, m.GuildID, 13, 12) {
 			err := s.MessageReactionAdd(m.ChannelID, m.ID, "🔥")
 			if err != nil {
 				log.Fatal("Unable to add a reaction to the 'acab' message")
@@ -35,7 +35,7 @@ func isAcab(message string) bool {
 	return strings.Contains(message, "acab") || strings.Contains(message, "1312")
 }
 
-func is13h12(mId string) bool {
-	date := getMessageTime(mId)
+func is13h12(m *discordgo.MessageCreate) bool {
+	date := getMessageTime(m)
 	return date.Hour() == 13 && date.Minute() == 12
 }
