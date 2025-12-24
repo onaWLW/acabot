@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"acabot/internal/discordHandlers"
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
@@ -8,7 +9,7 @@ import (
 )
 
 func HandleBot(dg *discordgo.Session, db *gorm.DB) {
-	dg.AddHandler(AcabSent)
+	dg.AddHandler(discordHandlers.AcabSent(db))
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
