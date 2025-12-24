@@ -9,13 +9,13 @@ import (
 
 func AlreadySent(db *gorm.DB, uId string, sId string, messageTime time.Time) bool {
 	var score model.Score
-	db.
+	result := db.
 		Where(&model.Score{
 			UserId:   uId,
 			ServerId: sId,
-		}).First(&score)
+		}).Take(&score)
 
-	if score.UserId == "" {
+	if result.RowsAffected == 0 {
 		return false
 	}
 

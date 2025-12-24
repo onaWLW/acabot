@@ -17,7 +17,6 @@ func AddAcab(db *gorm.DB, uId string, sId string, messageTime time.Time) {
 		Attrs(model.Score{
 			Streak:      0,
 			AcabCount:   0,
-			AcacCount:   0,
 			LastUpdated: messageTime,
 		}).
 		FirstOrCreate(&score)

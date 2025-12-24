@@ -7,6 +7,5 @@ type Score struct {
 	ServerId    string `gorm:"primaryKey"`
 	Streak      int
 	AcabCount   int
-	AcacCount   int
 	LastUpdated time.Time
 }
