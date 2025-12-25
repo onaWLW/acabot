@@ -1,21 +1,15 @@
 package databaseActions
 
 import (
-	"acabot/internal/model"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 func AlreadySent(db *gorm.DB, uId string, sId string, messageTime time.Time) bool {
-	var score model.Score
-	result := db.
-		Where(&model.Score{
-			UserId:   uId,
-			ServerId: sId,
-		}).Take(&score)
+	var score = GetScore(db, uId, sId)
 
-	if result.RowsAffected == 0 {
+	if score.UserId == "" {
 		return false
 	}
 
