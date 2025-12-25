@@ -22,7 +22,7 @@ func HandleBot(dg *discordgo.Session, db *gorm.DB) {
 
 	_, err = dg.ApplicationCommandCreate(
 		dg.State.User.ID,
-		"GUILDID",
+		"968590769361387600",
 		&discordgo.ApplicationCommand{
 			Name:        "acableaderboard",
 			Description: "Montre le leaderboard d'ACABot",

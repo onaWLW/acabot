@@ -25,7 +25,7 @@ func AcabSent(db *gorm.DB) func(*discordgo.Session, *discordgo.MessageCreate) {
 				log.Fatal("Unable to add a reaction to the 'acab' message")
 			}
 
-			databaseActions.AddAcab(db, m.Author.ID, m.GuildID, messageTime)
+			databaseActions.AddAcab(db, m.Author.ID, m.GuildID, m.Author.DisplayName(), messageTime)
 		}
 	}
 }
