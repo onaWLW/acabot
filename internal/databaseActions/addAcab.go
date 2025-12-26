@@ -23,7 +23,7 @@ func AddAcab(db *gorm.DB, uId string, sId string, uName string, messageTime time
 		FirstOrCreate(&score)
 
 	score.AcabCount += 1
-	if IsStreakStillValid(score.LastUpdated) {
+	if IsStreakStillValid(score.LastUpdated, messageTime) {
 		score.Streak += 1
 	} else {
 		score.Streak = 1

@@ -2,14 +2,16 @@ package databaseActions
 
 import "time"
 
-func IsStreakStillValid(t time.Time) bool {
-	now := time.Now()
+func IsStreakStillValid(updateTime time.Time, messageTime time.Time) bool {
+	last1312 := time.Date(messageTime.Year(), messageTime.Month(), messageTime.Day(), 13, 13, 0, 0, messageTime.Location())
 
-	last1312 := time.Date(now.Year(), now.Month(), now.Day(), 13, 12, 0, 0, now.Location())
-
-	if now.Before(last1312) {
+	if messageTime.Before(last1312) {
 		last1312 = last1312.AddDate(0, 0, -1)
 	}
 
-	return t.After(last1312)
+	return (updateTime.Day() == last1312.Day() &&
+		updateTime.Month() == last1312.Month() &&
+		updateTime.Year() == last1312.Year() &&
+		updateTime.Hour() == 13 &&
+		updateTime.Minute() == 12)
 }
